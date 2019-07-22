@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -37,6 +35,10 @@ public class ClearTrip {
 		driver.get("https://www.cleartrip.com");
 
 		Thread.sleep(2000);
+
+		// Actions act = new Actions(driver);
+
+		// act.keyDown(Keys.CONTROL).sendKeys(Keys.F5);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 
@@ -91,8 +93,6 @@ public class ClearTrip {
 		String departureDate = sdf.format(cal.getTime());
 
 		System.out.println("Departure Date >> " + departureDate);
-
-		// Thread.sleep(2000);
 
 		Calendar cal1 = Calendar.getInstance();
 
@@ -192,39 +192,84 @@ public class ClearTrip {
 
 		select.selectByVisibleText("2");
 
-		// -----------------------------------------------------------------
+		List<WebElement> al = select.getOptions();
+
+		System.out.println("Adults Drop Down List >> ");
+
+		for (WebElement element : al) {
+
+			System.out.println(element.getText());
+		}
+
+		System.out.println("=========================================");
 
 		WebElement SearchBtn = driver.findElement(By.id("SearchBtn"));
 
 		SearchBtn.click();
 
-		System.out.println("------------------------------");
+		// ===============================================================================================
 
-		List<WebElement> IndiGoList = driver
-				.findElements(By.xpath("//div[@class=\"colZero leg col12\"]//span[contains(text(),'IndiGo')]"));
+		List<WebElement> allFlights = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By
+				.xpath("//div[@class=\"filterContent clearFix  hasList  \"]//span[@class=\" span span18 truncate\"]")));
 
-		System.out.println("IndiGo List >> ");
+		System.out.println("All Flights are >>");
 
-		for (int i = 0; i < IndiGoList.size(); i++) {
+		for (WebElement element : allFlights) {
 
-			System.out.println(IndiGoList.get(i).getText());
+			if (!element.getText().equals("IndiGo") && !element.getText().equals("SpiceJet")) {
 
+				element.click();
+
+			}
+			System.out.println(element.getText());
 		}
 
-		System.out.println("------------------------------");
+		System.out.println("=========================================");
+
+		List<WebElement> IndiGoList = wait.until(ExpectedConditions
+				.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='colZero leg col12']//img[@title='IndiGo']")));
 
 		for (int i = 0; i < IndiGoList.size(); i++) {
 
 			if (i == 1) {
 
-				WebElement radiobtn = driver
-						.findElement(By.xpath("//div[@class=\"colZero leg col12\"]//span[contains(text(),'IndiGo')]"));
-
-				radiobtn.click();
-				break;
+				IndiGoList.get(i).click();
 			}
 
 		}
+
+		System.out.println("=========================================");
+
+		List<WebElement> SpiceJetList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+				By.xpath("//div[@class='colZero leg col12 last']//img[@title='SpiceJet']")));
+
+		for (int i = 0; i < SpiceJetList.size(); i++) {
+
+			if (i == 1) {
+
+				SpiceJetList.get(i).click();
+			}
+
+		}
+
+		WebElement bookTicket = driver.findElement(
+				By.xpath("//div[@style=\"display: block;\"]//button[@class='booking fRight' and @type='submit']"));
+
+		bookTicket.click();
+
+		System.out.println("=========================================");
+
+		WebElement insurance_box = driver.findElement(By.id("insurance_box"));
+
+		insurance_box.click();
+
+		WebElement insurance_confirm = driver.findElement(By.id("insurance_confirm"));
+
+		insurance_confirm.click();
+
+		WebElement itineraryBtn = driver.findElement(By.id("itineraryBtn"));
+
+		itineraryBtn.click();
 	}
 
 }

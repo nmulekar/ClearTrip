@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ClearTrip {
 
 	public static void main(String[] args) throws Exception {
+                System.out.println("Git hub >>");
 
 		WebDriver driver = new ChromeDriver();
 
